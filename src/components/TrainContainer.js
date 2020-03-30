@@ -8,7 +8,11 @@ const LOOP_SEPARATOR = '*'
 const TEXT = `20' calentamiento + 5*1' msiprogresivo/1'suave + 5' R2 + 5' R1 + 5*1'R3/2'R1 +5'R1`
 const processStep = (text) => {
     let obj = { text: text}
-    // if
+    const iol = text.indexOf(LOOP_SEPARATOR)
+    if( iol !== -1 ) {
+        const nol = parseInt( text.substring( 0, iol) , 10)
+        obj = { ...obj, loop: nol, text: text.substring( iol) }
+    }
     return obj
 }
 const processSteps = (text) => {
@@ -17,14 +21,15 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({text,i}) => {
+const Step = ({i,loop,text}) => {
     return (
-        <li>[{i}] {text}</li>
+    <li>[{i}] { loop ? <span style={{color:'red'}}> {loop}x </span> : null } {text}</li>
     )
 }
 Step.propTypes = {
-    text: PropTypes.string.isRequired,
     i: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    loop: PropTypes.number,
 }
 
 const Steps = ({steps}) => {
