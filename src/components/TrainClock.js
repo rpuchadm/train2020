@@ -2,19 +2,24 @@ import React, {useEffect,useState} from "react"
 import PropTypes from "prop-types"
 import moment from "moment"
 
+import Button from 'react-bootstrap/Button'
+import ListGroup from 'react-bootstrap/ListGroup'
+
+
 const Step = ({current,exer,exerMinutes,i,loop,rest,restMinutes,time,total}) => {
+    const variant = current ? 'success' : 'default' ;
     return (
-        <li>
+        <ListGroup.Item variant={variant} >
             [{i}] &nbsp; { current ? <>CURRENT</> : null }
-                { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
-                <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
-                { rest ? 
+            { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
+            <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
+            { rest ? 
                     <span style={{color:'green'}}>
                         &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
                     </span> 
                     : null }
-                , total:{total}
-            </li>
+            , total:{total}
+        </ListGroup.Item>
     )
 }
 Step.propTypes = {
@@ -31,7 +36,9 @@ Step.propTypes = {
 
 const Steps = ({steps,index,time}) => {
     return (
-        <ul>{ steps.map( (step,i) => <Step key={i} {...step} i={i} current={( i === index)} time={time} /> ) }</ul>
+        <ListGroup>
+            { steps.map( (step,i) => <Step key={i} {...step} i={i} current={( i === index)} time={time} /> ) }
+        </ListGroup>
     )
 }
 Steps.propTypes = {
@@ -106,9 +113,11 @@ const TrainClock = ({steps}) => {
         <br/>
         <hr/>
         <br/>
-        <button onClick={ () => setStart( new Date() ) }> START </button>
+        <Button variant='success'
+            onClick={ () => setStart( new Date() ) }> START </Button>
         &nbsp;&nbsp;&nbsp;
-        <button onClick={ () => setStart( null ) }> STOP </button>
+        <Button variant='danger'
+            onClick={ () => setStart( null ) }> STOP </Button>
         <br/>
         <br/>
         </>
