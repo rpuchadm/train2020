@@ -48,7 +48,8 @@ const TrainClock = ({steps}) => {
     },[start,count])
 
     const now = ( new Date()).getTime();
-    const amount = start ? Math.abs(  ( now - start.getTime() ) / 1000 ) : null ;
+    const amount = start ? Math.trunc( ( now - start.getTime() ) / 1000 ) : null ;
+    //const amount2 = amount1 ? Math.trunc( amount1 / 1000 ) : null ;
 
     return(
         <>
@@ -57,7 +58,7 @@ const TrainClock = ({steps}) => {
         <br/>
         { start ? 
             <>
-            {amount} = {now} - {start.getTime()}
+            {amount}  = {now} - {start.getTime()}
             &nbsp;&nbsp;&nbsp;
             <small>
                 init:{ moment(start).format('HH:mm:ss') }
