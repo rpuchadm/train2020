@@ -32,6 +32,12 @@ const processStep = (otext) => {
             obj = { ...obj, rest: rest }
         }
     }
+    const iom = ntext.indexOf(MINUTES_SEPARATOR)
+    if ( iom !== -1 ) {
+        const nm = parseInt( ntext.substring( 0, iom) , 10)
+        ntext = ntext.substring( iom+1 )
+        obj = { ...obj, exerMinutes: nm}
+    }
     return { ...obj, exer: ntext}
 }
 const processSteps = (text) => {
@@ -40,12 +46,12 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({exer,i,loop,rest,restMinutes}) => {
+const Step = ({exer,exerMinutes,i,loop,rest,restMinutes}) => {
     return (
         <li>
             [{i}] &nbsp;
                 { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
-                <span style={{color:'blue'}}> {exer} </span>
+                <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
                 { rest ? 
                     <span style={{color:'green'}}>
                         &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
@@ -56,6 +62,7 @@ const Step = ({exer,i,loop,rest,restMinutes}) => {
 }
 Step.propTypes = {
     exer: PropTypes.string.isRequired,
+    exerMinutes: PropTypes.number.isRequired,
     i: PropTypes.number.isRequired,
     loop: PropTypes.number,
     rest: PropTypes.string,
