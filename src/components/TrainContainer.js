@@ -15,15 +15,20 @@ const processStep = (otext) => {
         if( io !== -1 ) {
             const no = parseInt( ntext.substring( 0, io) , 10)
             ntext = ntext.substring( io+1 ).trim()
-            obj = { ...obj, loop: no, text: ntext.trim() }
+            obj = { ...obj, loop: no }
         }
     }
     {
         const io = ntext.indexOf(REST_SEPARATOR)
         if( io !== -1 ) {
-            const rest = ntext.substring( io+1 )
+            let rest = ntext.substring( io+1 )
             ntext = ntext.substring( 0, io).trim()
-            console.log( 'rest:', rest)
+            const iom = rest.indexOf(MINUTES_SEPARATOR)
+            if ( iom !== -1 ) {
+                const nm = parseInt( rest.substring( 0, iom) , 10)
+                rest = rest.substring( iom+1 )
+                obj = { ...obj, restMinutes: nm}
+            }
             obj = { ...obj, rest: rest }
         }
     }
@@ -35,13 +40,17 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({exer,i,loop,rest}) => {
+const Step = ({exer,i,loop,rest,restMinutes}) => {
     return (
         <li>
             [{i}] &nbsp;
                 { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
                 <span style={{color:'blue'}}> {exer} </span>
-                { rest ? <span style={{color:'green'}}> &nbsp; / {rest} &nbsp; </span> : null }
+                { rest ? 
+                    <span style={{color:'green'}}>
+                        &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
+                    </span> 
+                    : null }
             </li>
     )
 }
@@ -50,6 +59,7 @@ Step.propTypes = {
     i: PropTypes.number.isRequired,
     loop: PropTypes.number,
     rest: PropTypes.string,
+    restMinutes: PropTypes.number,
 }
 
 const Steps = ({steps}) => {
