@@ -21,7 +21,7 @@ const processStep = (otext) => {
     {
         const io = ntext.indexOf(REST_SEPARATOR)
         if( io !== -1 ) {
-            const rest = ntext.substring( io+1 )  // ntext.substring( io+1 )
+            const rest = ntext.substring( io+1 )
             ntext = ntext.substring( 0, io).trim()
             console.log( 'rest:', rest)
             obj = { ...obj, rest: rest }
