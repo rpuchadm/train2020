@@ -1,5 +1,6 @@
-import React from "react"
+import React, {useEffect,useState} from "react"
 import PropTypes from "prop-types"
+import moment from "moment"
 
 const STEP_SEPARATOR = '+'
 const LOOP_SEPARATOR = '*'
@@ -80,12 +81,37 @@ Steps.propTypes = {
 }
 
 const TrainContainer = () => {
+    const [start, setStart] = useState(null);
+    const [count, setCount] = useState(0);
     const steps = processSteps( TEXT) // text.split(STEP_SEPARATOR);
+
+    useEffect( () => {
+        if( start ) {
+            setTimeout( () => {
+                setCount( (prev) => prev+1 )
+            }, 1000)
+        }
+    },[start,count])
+
     return(
         <>
         <h1>TrainContainer</h1>
         <Steps steps={steps} />
-        <br/><br/>
+        <br/>
+        { start ? 
+            <> 
+            init:{ moment(start).format('HH:mm:ss') }
+            &nbsp;
+            count: {count} 
+            </> : null }
+        <br/>
+        <hr/>
+        <br/>
+        <button onClick={ () => setStart( new Date() ) }> START </button>
+        &nbsp;&nbsp;&nbsp;
+        <button onClick={ () => setStart( null ) }> STOP </button>
+        <br/>
+        <br/>
         </>
     )
 }

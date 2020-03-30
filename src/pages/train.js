@@ -8,8 +8,6 @@ import TrainContainer from "../components/TrainContainer"
 const TrainPage = () => (
   <Layout>
     <SEO title="Train" />
-    <h1>Hi from the Train page</h1>
-    <p>Welcome to Train page</p>
     <TrainContainer />
     <Link to="/">Go back to the homepage</Link>
   </Layout>
