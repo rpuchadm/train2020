@@ -3,17 +3,31 @@ import PropTypes from "prop-types"
 
 const STEP_SEPARATOR = '+'
 const LOOP_SEPARATOR = '*'
+const REST_SEPARATOR = '/'
+const MINUTES_SEPARATOR = '\''
 
-
-const TEXT = `20' calentamiento + 5*1' msiprogresivo/1'suave + 5' R2 + 5' R1 + 5*1'R3/2'R1 +5'R1`
-const processStep = (text) => {
-    let obj = { text: text}
-    const iol = text.indexOf(LOOP_SEPARATOR)
-    if( iol !== -1 ) {
-        const nol = parseInt( text.substring( 0, iol) , 10)
-        obj = { ...obj, loop: nol, text: text.substring( iol) }
+const TEXT = `20' calentamiento + 5*1' progresivo/1'suave + 5' R2 + 5' R1 + 5*1'R3/2'R1 +5'R1`
+const processStep = (otext) => {
+    let ntext = otext.trim()
+    let obj = { otext: otext}
+    {
+        const io = ntext.indexOf(LOOP_SEPARATOR)
+        if( io !== -1 ) {
+            const no = parseInt( ntext.substring( 0, io) , 10)
+            ntext = ntext.substring( io+1 )
+            obj = { ...obj, loop: no, text: ntext.trim() }
+        }
     }
-    return obj
+    {
+        const io = ntext.indexOf(REST_SEPARATOR)
+        if( io !== -1 ) {
+            const rest = ntext.substring( io+1 )  // ntext.substring( io+1 )
+            ntext = ntext.substring( 0, io)
+            console.log( 'rest:', rest)
+            obj = { ...obj, rest: rest, text: ntext.trim() }
+        }
+    }
+    return { ...obj, text: ntext}
 }
 const processSteps = (text) => {
     const textarray = text.split(STEP_SEPARATOR)
@@ -21,15 +35,21 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({i,loop,text}) => {
+const Step = ({i,loop,rest,text}) => {
     return (
-    <li>[{i}] { loop ? <span style={{color:'red'}}> {loop}x </span> : null } {text}</li>
+        <li>
+            [{i}] &nbsp;
+                { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
+                <span style={{color:'blue'}}> {text} </span>
+                { rest ? <span style={{color:'green'}}> &nbsp; / {rest} &nbsp; </span> : null }
+            </li>
     )
 }
 Step.propTypes = {
     i: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
     loop: PropTypes.number,
+    rest: PropTypes.string,
+    text: PropTypes.string.isRequired,
 }
 
 const Steps = ({steps}) => {
