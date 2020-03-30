@@ -2,6 +2,7 @@ import React, {useEffect,useState} from "react"
 import PropTypes from "prop-types"
 import moment from "moment"
 
+import Badge from "react-bootstrap/Badge"
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 
@@ -10,15 +11,19 @@ const Step = ({current,exer,exerMinutes,i,loop,rest,restMinutes,time,total}) => 
     const variant = current ? 'success' : 'default' ;
     return (
         <ListGroup.Item variant={variant} >
-            [{i}] &nbsp; { current ? <>CURRENT</> : null }
-            { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
-            <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
+            { loop ? <> <Badge variant='danger'> {loop} x &nbsp; </Badge> &nbsp; </> : null } 
+            <Badge variant='primary'> {exerMinutes}' {exer} </Badge>
             { rest ? 
-                    <span style={{color:'green'}}>
+                    <> &nbsp; <Badge variant='success'>
                         &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
-                    </span> 
-                    : null }
-            , total:{total}
+                    </Badge> </>  
+                    : null 
+            }
+            { current ? 
+                <> &nbsp; <Badge variant='success'> {time}/{total} </Badge> </> 
+                : 
+                <> &nbsp; <Badge variant='secondary'> {total} </Badge> </> 
+            }
         </ListGroup.Item>
     )
 }
