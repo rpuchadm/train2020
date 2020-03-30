@@ -61,7 +61,7 @@ const Time = ({seconds}) => {
         <>
         { hour ? <>{hour} h. &nbsp; </> : null }
         { min || hour ? <>{min} min. &nbsp; </> : null }
-        { sec || min || hour ? <>{sec} sec. &nbsp; </> : null }
+        {sec} sec.
         </>
     )
 }
@@ -85,21 +85,30 @@ const TrainClock = ({steps}) => {
     const amount = start ? Math.trunc( ( now - start.getTime() ) / 1000 ) : null ;
     let time = amount ;
     let index = 0 ;
-    while ( index < steps.length ) {
-        const step = steps[index] ;
-        time -= step.total ;
-        if( time < 0 ) {  break } else { index++ }
-    }
+    if( start ) {
+        while ( index < steps.length ) {
+            const step = steps[index] ;
+            time -= step.total ;
+            if( time < 0 ) {  break } else { index++ }
+        }
+    } else index = -1 ;
 
     return(
         <>
-        <h1>TrainClock</h1>
+        <h1>{ start ? <Time seconds={amount} /> : <>&nbsp;</> } </h1>
         <Steps steps={steps} index={index} time={time} />
         <br/>
+        <hr/>
+        <br/>
+        <Button variant='success'
+            onClick={ () => setStart( new Date() ) }> START </Button>
+        &nbsp;&nbsp;&nbsp;
+        <Button variant='danger'
+            onClick={ () => setStart( null ) }> STOP </Button>
+        <br/>
+        <hr/>
         { start ? 
             <>
-            <Time seconds={amount} />
-            &nbsp;&nbsp;&nbsp;
             <small>
                 init:{ moment(start).format('HH:mm:ss') }
                 &nbsp;
@@ -110,15 +119,6 @@ const TrainClock = ({steps}) => {
                 time: {time}
             </small>
             </> : null }
-        <br/>
-        <hr/>
-        <br/>
-        <Button variant='success'
-            onClick={ () => setStart( new Date() ) }> START </Button>
-        &nbsp;&nbsp;&nbsp;
-        <Button variant='danger'
-            onClick={ () => setStart( null ) }> STOP </Button>
-        <br/>
         <br/>
         </>
     )

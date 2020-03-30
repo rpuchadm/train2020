@@ -4,7 +4,7 @@ import React from "react"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const Header = ({ siteTitle }) => (
+const Header = ({ title }) => (
   <header
     style={{
       background: `rebeccapurple`,
@@ -26,7 +26,7 @@ const Header = ({ siteTitle }) => (
             textDecoration: `none`,
           }}
         >
-          {siteTitle}
+          {title}
         </Link>
       </h1>
     </div>
