@@ -80,9 +80,12 @@ const TrainClock = ({steps}) => {
 
     useEffect( () => {
         if( start ) {
-            setTimeout( () => {
+            const timeout = setTimeout( () => {
                 setCount( (prev) => (prev+1)%10 )
             }, 1000)
+            return () => {
+                clearTimeout(timeout);
+            }
         }
     },[start,count])
 
