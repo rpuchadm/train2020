@@ -59,7 +59,7 @@ const Time = ({seconds}) => {
     )
 }
 Time.propTypes = {
-    seconds: PropTypes.array.isRequired,
+    seconds: PropTypes.number.isRequired,
 }
 
 const TrainClock = ({steps}) => {
