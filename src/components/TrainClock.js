@@ -70,7 +70,13 @@ const TrainClock = ({steps}) => {
 
     const now = ( new Date()).getTime();
     const amount = start ? Math.trunc( ( now - start.getTime() ) / 1000 ) : null ;
-    //const amount2 = amount1 ? Math.trunc( amount1 / 1000 ) : null ;
+    let time = amount ;
+    let index = 0 ;
+    while ( index < steps.length ) {
+        const step = steps[index] ;
+        time -= step.total ;
+        if( time < 0 ) {  break } else { index++ }
+    }
 
     return(
         <>
@@ -84,7 +90,11 @@ const TrainClock = ({steps}) => {
             <small>
                 init:{ moment(start).format('HH:mm:ss') }
                 &nbsp;
-                count: {count} 
+                count: {count}
+                &nbsp;
+                index: {index}
+                &nbsp;
+                time: {time}
             </small>
             </> : null }
         <br/>
