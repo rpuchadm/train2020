@@ -1,6 +1,6 @@
-import React, {useEffect,useState} from "react"
-import PropTypes from "prop-types"
-import moment from "moment"
+import React from "react"
+
+import TrainClock from "./TrainClock"
 
 const STEP_SEPARATOR = '+'
 const LOOP_SEPARATOR = '*'
@@ -8,6 +8,7 @@ const REST_SEPARATOR = '/'
 const MINUTES_SEPARATOR = '\''
 
 const TEXT = `20' calentamiento + 5*1' progresivo/1'suave + 5' R2 + 5' R1 + 5*1'R3/2'R1 +5'R1`
+
 const processStep = (otext) => {
     let ntext = otext.trim()
     let obj = { otext: otext}
@@ -47,79 +48,10 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({exer,exerMinutes,i,loop,rest,restMinutes}) => {
-    return (
-        <li>
-            [{i}] &nbsp;
-                { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
-                <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
-                { rest ? 
-                    <span style={{color:'green'}}>
-                        &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
-                    </span> 
-                    : null }
-            </li>
-    )
-}
-Step.propTypes = {
-    exer: PropTypes.string.isRequired,
-    exerMinutes: PropTypes.number.isRequired,
-    i: PropTypes.number.isRequired,
-    loop: PropTypes.number,
-    rest: PropTypes.string,
-    restMinutes: PropTypes.number,
-}
-
-const Steps = ({steps}) => {
-    //return ( <>{JSON.stringify(steps)} </>)
-    return (
-        <ul>{ steps.map( (step,i) => <Step key={i} {...step} i={i} /> ) }</ul>
-    )
-}
-Steps.propTypes = {
-    steps: PropTypes.array.isRequired,
-}
-
 const TrainContainer = () => {
-    const [start, setStart] = useState(null);
-    const [count, setCount] = useState(0);
-    const steps = processSteps( TEXT) // text.split(STEP_SEPARATOR);
-
-    useEffect( () => {
-        if( start ) {
-            setTimeout( () => {
-                setCount( (prev) => (prev+1)%10 )
-            }, 1000)
-        }
-    },[start,count])
-
-    const now = ( new Date()).getTime();
-    const amount = start ? Math.abs(  ( now - start.getTime() ) / 1000 ) : null ;
-
+    const steps = processSteps( TEXT)
     return(
-        <>
-        <h1>TrainContainer</h1>
-        <Steps steps={steps} />
-        <br/>
-        { start ? 
-            <>
-            {amount} = {now} - {start.getTime()}
-            &nbsp;&nbsp;&nbsp;
-            <small>
-                init:{ moment(start).format('HH:mm:ss') }
-                &nbsp;
-                count: {count} 
-            </small>
-            </> : null }
-        <br/>
-        <hr/>
-        <br/>
-        <button onClick={ () => setStart( new Date() ) }> START </button>
-        &nbsp;&nbsp;&nbsp;
-        <button onClick={ () => setStart( null ) }> STOP </button>
-        <br/>
-        <br/>
-        </>
+        <TrainClock steps={steps} />
     )
 }
 export default TrainContainer
