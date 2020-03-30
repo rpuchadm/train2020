@@ -88,10 +88,13 @@ const TrainContainer = () => {
     useEffect( () => {
         if( start ) {
             setTimeout( () => {
-                setCount( (prev) => prev+1 )
+                setCount( (prev) => (prev+1)%10 )
             }, 1000)
         }
     },[start,count])
+
+    const now = ( new Date()).getTime();
+    const amount = start ? Math.abs(  ( now - start.getTime() ) / 1000 ) : null ;
 
     return(
         <>
@@ -99,10 +102,14 @@ const TrainContainer = () => {
         <Steps steps={steps} />
         <br/>
         { start ? 
-            <> 
-            init:{ moment(start).format('HH:mm:ss') }
-            &nbsp;
-            count: {count} 
+            <>
+            {amount} = {now} - {start.getTime()}
+            &nbsp;&nbsp;&nbsp;
+            <small>
+                init:{ moment(start).format('HH:mm:ss') }
+                &nbsp;
+                count: {count} 
+            </small>
             </> : null }
         <br/>
         <hr/>
