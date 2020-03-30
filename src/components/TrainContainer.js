@@ -41,7 +41,7 @@ const processStep = (text) => {
         let total = nm ;
         if ( obj.loop ) total = obj.loop * total ;
         if ( obj.rest ) total = total + obj.restMinutes ; 
-        obj = { ...obj, exerMinutes: nm, total: nm}
+        obj = { ...obj, exerMinutes: nm, total: total}
     }
     return { ...obj, exer: exer}
 }

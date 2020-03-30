@@ -37,6 +37,25 @@ Steps.propTypes = {
     steps: PropTypes.array.isRequired,
 }
 
+const Time = ({seconds}) => {
+    let hour = 0 ; let min = 0 ; let sec = seconds ;
+    if ( sec > 59 ) {
+        min = Math.trunc( sec / 60 )
+        sec = sec % 60
+    }
+    if ( min > 59 ) {
+        hour = Math.trunc( min / 60 )
+        min = min % 60
+    }
+    return(
+        <>
+        { hour ? <>{hour} h. &nbsp; </> : null }
+        { min || hour ? <>{min} min. &nbsp; </> : null }
+        { sec || min || hour ? <>{sec} sec. &nbsp; </> : null }
+        </>
+    )
+}
+
 const TrainClock = ({steps}) => {
     const [start, setStart] = useState(null);
     const [count, setCount] = useState(0);
@@ -60,7 +79,7 @@ const TrainClock = ({steps}) => {
         <br/>
         { start ? 
             <>
-            {amount}  = {now} - {start.getTime()}
+            <Time seconds={amount} />
             &nbsp;&nbsp;&nbsp;
             <small>
                 init:{ moment(start).format('HH:mm:ss') }
