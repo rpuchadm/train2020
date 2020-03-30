@@ -2,10 +2,10 @@ import React, {useEffect,useState} from "react"
 import PropTypes from "prop-types"
 import moment from "moment"
 
-const Step = ({exer,exerMinutes,i,loop,rest,restMinutes,total}) => {
+const Step = ({current,exer,exerMinutes,i,loop,rest,restMinutes,time,total}) => {
     return (
         <li>
-            [{i}] &nbsp;
+            [{i}] &nbsp; { current ? <>CURRENT</> : null }
                 { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
                 <span style={{color:'blue'}}> {exerMinutes}' {exer} </span>
                 { rest ? 
@@ -18,23 +18,26 @@ const Step = ({exer,exerMinutes,i,loop,rest,restMinutes,total}) => {
     )
 }
 Step.propTypes = {
+    current: PropTypes.bool,
     exer: PropTypes.string.isRequired,
     exerMinutes: PropTypes.number.isRequired,
     i: PropTypes.number.isRequired,
     loop: PropTypes.number,
     rest: PropTypes.string,
     restMinutes: PropTypes.number,
+    time: PropTypes.number,
     total: PropTypes.number.isRequired,
 }
 
-const Steps = ({steps}) => {
-    //return ( <>{JSON.stringify(steps)} </>)
+const Steps = ({steps,index,time}) => {
     return (
-        <ul>{ steps.map( (step,i) => <Step key={i} {...step} i={i} /> ) }</ul>
+        <ul>{ steps.map( (step,i) => <Step key={i} {...step} i={i} current={( i === index)} time={time} /> ) }</ul>
     )
 }
 Steps.propTypes = {
     steps: PropTypes.array.isRequired,
+    index: PropTypes.number,
+    time: PropTypes.number,
 }
 
 const Time = ({seconds}) => {
@@ -54,6 +57,9 @@ const Time = ({seconds}) => {
         { sec || min || hour ? <>{sec} sec. &nbsp; </> : null }
         </>
     )
+}
+Time.propTypes = {
+    seconds: PropTypes.array.isRequired,
 }
 
 const TrainClock = ({steps}) => {
@@ -81,7 +87,7 @@ const TrainClock = ({steps}) => {
     return(
         <>
         <h1>TrainClock</h1>
-        <Steps steps={steps} />
+        <Steps steps={steps} index={index} time={time} />
         <br/>
         { start ? 
             <>
