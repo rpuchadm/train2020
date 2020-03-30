@@ -2,7 +2,7 @@ import React, {useEffect,useState} from "react"
 import PropTypes from "prop-types"
 import moment from "moment"
 
-const Step = ({exer,exerMinutes,i,loop,rest,restMinutes}) => {
+const Step = ({exer,exerMinutes,i,loop,rest,restMinutes,total}) => {
     return (
         <li>
             [{i}] &nbsp;
@@ -13,6 +13,7 @@ const Step = ({exer,exerMinutes,i,loop,rest,restMinutes}) => {
                         &nbsp; / { restMinutes ? <>{restMinutes}'</> : null } {rest} &nbsp; 
                     </span> 
                     : null }
+                , total:{total}
             </li>
     )
 }
@@ -23,6 +24,7 @@ Step.propTypes = {
     loop: PropTypes.number,
     rest: PropTypes.string,
     restMinutes: PropTypes.number,
+    total: PropTypes.number.isRequired,
 }
 
 const Steps = ({steps}) => {
