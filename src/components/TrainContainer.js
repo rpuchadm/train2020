@@ -14,7 +14,7 @@ const processStep = (otext) => {
         const io = ntext.indexOf(LOOP_SEPARATOR)
         if( io !== -1 ) {
             const no = parseInt( ntext.substring( 0, io) , 10)
-            ntext = ntext.substring( io+1 )
+            ntext = ntext.substring( io+1 ).trim()
             obj = { ...obj, loop: no, text: ntext.trim() }
         }
     }
@@ -22,12 +22,12 @@ const processStep = (otext) => {
         const io = ntext.indexOf(REST_SEPARATOR)
         if( io !== -1 ) {
             const rest = ntext.substring( io+1 )  // ntext.substring( io+1 )
-            ntext = ntext.substring( 0, io)
+            ntext = ntext.substring( 0, io).trim()
             console.log( 'rest:', rest)
-            obj = { ...obj, rest: rest, text: ntext.trim() }
+            obj = { ...obj, rest: rest }
         }
     }
-    return { ...obj, text: ntext}
+    return { ...obj, exer: ntext}
 }
 const processSteps = (text) => {
     const textarray = text.split(STEP_SEPARATOR)
@@ -35,21 +35,21 @@ const processSteps = (text) => {
     return steparray
 }
 
-const Step = ({i,loop,rest,text}) => {
+const Step = ({exer,i,loop,rest}) => {
     return (
         <li>
             [{i}] &nbsp;
                 { loop ? <span style={{color:'red'}}> {loop} x &nbsp; </span> : null } 
-                <span style={{color:'blue'}}> {text} </span>
+                <span style={{color:'blue'}}> {exer} </span>
                 { rest ? <span style={{color:'green'}}> &nbsp; / {rest} &nbsp; </span> : null }
             </li>
     )
 }
 Step.propTypes = {
+    exer: PropTypes.string.isRequired,
     i: PropTypes.number.isRequired,
     loop: PropTypes.number,
     rest: PropTypes.string,
-    text: PropTypes.string.isRequired,
 }
 
 const Steps = ({steps}) => {
