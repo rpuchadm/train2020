@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from "react"
+import React, {useEffect,useRef,useState} from "react"
 import PropTypes from "prop-types"
 import moment from "moment"
 
@@ -6,6 +6,7 @@ import Badge from "react-bootstrap/Badge"
 import Button from 'react-bootstrap/Button'
 import ListGroup from 'react-bootstrap/ListGroup'
 
+const audio1src = "../sounds/339816__inspectorj__hand-bells-f-single.wav"
 
 const Step = ({current,exer,exerMinutes,i,loop,rest,restMinutes,time,total}) => {
     const variant = current ? 'success' : 'default' ;
@@ -77,7 +78,7 @@ Time.propTypes = {
 const TrainClock = ({steps}) => {
     const [start, setStart] = useState(null);
     const [count, setCount] = useState(0);
-
+    const audio1 = useRef(null);
     useEffect( () => {
         if( start ) {
             const timeout = setTimeout( () => {
@@ -88,6 +89,8 @@ const TrainClock = ({steps}) => {
             }
         }
     },[start,count])
+
+    useEffect( () => { audio1.current = new Audio( audio1src) } , [])
 
     const now = ( new Date()).getTime();
     const amount = start ? Math.trunc( ( now - start.getTime() ) / 1000 ) : null ;
@@ -100,6 +103,8 @@ const TrainClock = ({steps}) => {
             if( time < 0 ) {  break } else { index++ }
         }
     } else index = -1 ;
+
+    if ( time === -1 ) { if ( audio1.current ) { audio1.current.play() } }
 
     return(
         <>
